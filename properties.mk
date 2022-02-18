@@ -102,11 +102,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # GPU
 PRODUCT_PROPERTY_OVERRIDES += \
-    debug.egl.hw=0 \
+    debug.egl.hw=1 \
     debug.enable.sglscale=1 \
     debug.gralloc.gfx_ubwc_disable=0 \
     debug.sf.enable_hwc_vds=1 \
-    debug.sf.hw=0 \
+    debug.sf.hw=1 \
     debug.sf.latch_unsignaled=1 \
     debug.sf.recomputecrop=0 \
     dev.pm.dyn_samplingrate=1 \
@@ -135,6 +135,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.qti.sys.fw.bservice_enable=true \
     ro.vendor.qti.sys.fw.bservice_limit=5 \
     ro.vendor.qti.sys.fw.bservice_age=5000
+
+# OEM Unlock reporting
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.oem_unlock_supported=1
 
 # Perf
 PRODUCT_PROPERTY_OVERRIDES += \

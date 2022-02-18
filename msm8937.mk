@@ -183,12 +183,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service.msm8937
 
-# LineageActions
-ifeq ($(filter ahannah rhannah,$(TARGET_DEVICE)),)
-PRODUCT_PACKAGES += \
-    LineageActions
-endif
-
 # LiveDisplay
 PRODUCT_PACKAGES += \
     vendor.lineage.livedisplay@2.0-service-sysfs
@@ -201,6 +195,12 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
     $(LOCAL_PATH)/configs/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
     $(LOCAL_PATH)/configs/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
+
+# MotoActions
+ifeq ($(filter %ahannah %rhannah,$(TARGET_PRODUCT)),)
+PRODUCT_PACKAGES += \
+    MotoActions
+endif
 
 # OMX
 PRODUCT_PACKAGES += \
@@ -243,17 +243,18 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml \
     $(LOCAL_PATH)/configs/com.motorola.cameraone.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.motorola.cameraone.xml
 
-ifeq ($(filter ahannah james rhannah,$(TARGET_DEVICE)),)
+ifeq ($(filter %ahannah %james %rhannah,$(TARGET_PRODUCT)),)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.compass.xml \
     frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.gyroscope.xml
 endif
 
-ifeq ($(filter james rhannah,$(TARGET_DEVICE)),)
+ifeq ($(filter %james %rhannah,$(TARGET_PRODUCT)),)
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute-0.xml \
-    frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level-0.xml \
-    frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_1.xml
+    frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute.xml \
+    frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level.xml \
+    frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version.xml \
+    frameworks/native/data/etc/android.software.vulkan.deqp.level-2019-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml
 endif
 
 # Power
@@ -311,10 +312,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     init.qcom.early_boot.sh \
     init.qcom.post_boot.sh \
-    init.qcom.sh \
-    init.qcom.syspart_fixup.sh
+    init.qcom.sh
 
 # Recovery
+PRODUCT_PACKAGES += \
+    librecovery_updater_motorola
+
 TARGET_RECOVERY_DENSITY := xhdpi
 
 # RenderScript
@@ -358,6 +361,10 @@ PRODUCT_PACKAGES += \
 # USB
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
+
+# Verity
+PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/platform/soc/7824900.sdhci/by-name/system
+$(call inherit-product, build/target/product/verity.mk)
 
 # Vibrator
 PRODUCT_PACKAGES += \
