@@ -12,7 +12,7 @@ $(call inherit-product, vendor/motorola/msm8937-common/msm8937-common-vendor.mk)
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-aosp
+    $(LOCAL_PATH)/overlay-lineage
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
 
@@ -190,8 +190,8 @@ PRODUCT_PACKAGES += \
 endif
 
 # LiveDisplay
-#PRODUCT_PACKAGES += \
-#    vendor.lineage.livedisplay@2.0-service-sysfs
+PRODUCT_PACKAGES += \
+    vendor.lineage.livedisplay@2.0-service-sysfs
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -352,8 +352,8 @@ PRODUCT_PACKAGES += \
     TetheringConfigOverlay
 
 # Trust HAL
-#PRODUCT_PACKAGES += \
-#    vendor.lineage.trust@1.0-service
+PRODUCT_PACKAGES += \
+    vendor.lineage.trust@1.0-service
 
 # USB
 PRODUCT_PACKAGES += \
