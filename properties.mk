@@ -41,10 +41,11 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.qcom.bluetooth.soc=smd
+    vendor.qcom.bluetooth.soc=pronto
 
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    vendor.bluetooth.soc=smd
+# BPF
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.kernel.ebpf.supported=true
 
 # Camera
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -65,6 +66,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     persist.vendor.cne.feature=1
+
+# Crypto
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.crypto.volume.filenames_mode=aes-256-cts
 
 # Dalvik
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -135,10 +140,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.qti.sys.fw.bservice_enable=true \
     ro.vendor.qti.sys.fw.bservice_limit=5 \
     ro.vendor.qti.sys.fw.bservice_age=5000
-
-# OEM Unlock reporting
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.oem_unlock_supported=1
 
 # Perf
 PRODUCT_PROPERTY_OVERRIDES += \

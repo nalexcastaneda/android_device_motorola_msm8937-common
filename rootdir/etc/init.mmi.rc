@@ -1,14 +1,12 @@
 # Target-specific file
 import /vendor/etc/init/hw/init.mmi.overlay.rc
 
-# Moto USB configuration
-import /vendor/etc/init/hw/init.mmi.usb.rc
+import /vendor/etc/init/hw/init.msm.usb.configfs.rc
 
 import /vendor/etc/init/hw/init.oem.rc
 
 on early-boot
     write /sys/module/subsystem_restart/parameters/disable_restart_work 0x0
-    write /proc/sys/kernel/poweroff_cmd "/system/bin/reboot -p"
 
 on init
     chown system log /sys/fs/pstore/console-ramoops-0
@@ -190,9 +188,6 @@ on boot
     chown system system /sys/class/leds/vibrator/duration
     chmod 0660 /sys/class/leds/vibrator/duration
     chown root oem_5020 /sys/bus/i2c/devices/2-005a/reduce
-
-    # Permission for vibrator amplitude
-    chown system system /sys/class/timed_output/vibrator/voltage_level
 
     # Change ownership of aov related sysfs entries
     chown audio audio /sys/kernel/aov/trigger
