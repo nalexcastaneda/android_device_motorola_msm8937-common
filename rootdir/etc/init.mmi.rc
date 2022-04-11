@@ -1,12 +1,14 @@
 # Target-specific file
 import /vendor/etc/init/hw/init.mmi.overlay.rc
 
-import /vendor/etc/init/hw/init.msm.usb.configfs.rc
+# Moto USB configuration
+import /vendor/etc/init/hw/init.mmi.usb.rc
 
 import /vendor/etc/init/hw/init.oem.rc
 
 on early-boot
     write /sys/module/subsystem_restart/parameters/disable_restart_work 0x0
+    write /proc/sys/kernel/poweroff_cmd "/system/bin/reboot -p"
 
 on init
     chown system log /sys/fs/pstore/console-ramoops-0
@@ -43,8 +45,8 @@ on post-fs
     mkdir /mnt/vendor/persist/bt 0755 oem_5004 bluetooth
     mkdir /mnt/vendor/persist/wmdrm 0775 oem_5003 oem_5003
     mkdir /mnt/vendor/persist/public/usc_dm 0775 radio radio
-    mkdir /mnt/vendor/persist/sds 0700 system system
-    mkdir /mnt/vendor/persist/rfs/msm/mpss/mot_rfs 0771 vendor_rfs system
+    mkdir /mnt/vendor/persist/sds 0700 vold vold
+    mkdir /mnt/vendor/persist/rfs/msm/mpss/mot_rfs 0771 rfs system
 
     # This dir is used to store any OMA(both DM and CP) files in persist partition
     # Any app with radio UID or oem_5004 GID can read/write/execute files in this dir.
@@ -157,7 +159,7 @@ on post-fs-data
 
     # Required by FingerPrint Cards (FPC) via init so we don't need to give qseecomd or fingerprintd permissions to create them
     mkdir /data/vendor/fpc 0700 system system
-    mkdir /data/vendor/.fps 0770 system oem_5015
+    mkdir /data/vendor/.fps 0770 system fingerp
 
 on boot
     # restore default console_loglevel to KERN_DEBUG
@@ -189,6 +191,9 @@ on boot
     chmod 0660 /sys/class/leds/vibrator/duration
     chown root oem_5020 /sys/bus/i2c/devices/2-005a/reduce
 
+    # Permission for vibrator amplitude
+    chown system system /sys/class/timed_output/vibrator/voltage_level
+
     # Change ownership of aov related sysfs entries
     chown audio audio /sys/kernel/aov/trigger
     chown audio audio /sys/kernel/aov/register
@@ -207,18 +212,7 @@ on charger
     trigger early-fs
     trigger fs
     trigger post-fs
-
-    ## Fold important parts of late-fs into `on charger` to prevent
-    ## starting bootanimation in charge_only_mode
-
-    # Ensure that tracefs has the correct permissions.
-    # This does not work correctly if it is called in post-fs.
-    chmod 0755 /sys/kernel/tracing
-    chmod 0755 /sys/kernel/debug/tracing
-
-    # HALs required before storage encryption can get unlocked (FBE/FDE)
-    class_start early_hal
-
+    trigger late-fs
     trigger post-fs-data
     trigger moto-charger
     class_stop main
@@ -260,7 +254,6 @@ on property:vendor.wifi.tethering=true
 
 # Override the AOSP sensor HAL service definition to add input group access
 service vendor.sensors-hal-1-0 /vendor/bin/hw/android.hardware.sensors@1.0-service
-    override
     class hal
     user system
     group system input wakelock
